@@ -12,7 +12,7 @@ function editNav() {
 // DOM Elements
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll('.modal-btn');
-const close_span = document.querySelector('.close');
+const close_span = document.querySelectorAll('.close');
 const formSub = document.getElementById('formSub');
 const tournamentInput = document.getElementById('numberPlayed');
 const checkbox = document.getElementsByClassName('checkbox-input');
@@ -184,9 +184,32 @@ function checkTcu() {
   }
 }
 
-// for 2nd page modal
-// modalbg.innerHTML = `<p>test</p>`;
+// 2nd page modal
+function renderValidation() {
+  modalbg.innerHTML = '';
+  const spanClose = document.createElement('span');
+  spanClose.classList.add('close');
+  const content = document.createElement('div');
+  content.classList.add('content');
+  modalbg.appendChild(content);
+  content.appendChild(spanClose);
+  spanClose.addEventListener('click', () => {
+    closeModal();
+  });
 
+  const modal2 = document.createElement('div');
+  modal2.classList.add('modal-body', 'modal-confirm');
+  modal2.textContent = 'Merci, votre réservation est enregistrée !';
+  content.appendChild(modal2);
+
+  const modal2_btn = document.createElement('button')
+  modal2_btn.classList.add('button', 'btn-submit');
+  modal2_btn.textContent = 'Fermer';
+  modal2_btn.addEventListener('click', () => {
+    closeModal();
+  });
+  content.appendChild(modal2_btn);
+}
 
 // Events Listener
 
@@ -194,9 +217,9 @@ function checkTcu() {
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
 // close modal event
-close_span.addEventListener('click', () => {
+close_span.forEach((x) => x.addEventListener('click', () => {
   closeModal();
-});
+}));
 
 firstname_input.addEventListener('input', () => {
   checkFirstname();
@@ -240,12 +263,14 @@ formSub.addEventListener('submit', (e) => {
   checkTcu();
 
   if (firstnameValid && lastnameValid && emailValid && is_13 && numberPlayedValid && tcuValid) {
-    alert('form ok => submit');
+    // alert('form ok => submit');
+    renderValidation();
   } else {
     console.error('error form');
     return false;
   }
 
 });
+
 
 
