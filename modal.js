@@ -32,7 +32,7 @@ const tcu_checkbox = document.getElementById('checkbox1');
 
 const city_checkbox = document.querySelectorAll('.checkbox-city[type=\'checkbox\']');
 
-let numberPlayed = formSub.numberPlayed.value;
+//TODO FIX REGEX
 let nameReg = /[\d@~°\\./!&$`€*]/;
 
 // let numberPlayed = formSub.numberPlayed.value;
@@ -41,34 +41,13 @@ let city = 0;
 let is_13 = false;
 let isValid = false;
 
-
-// city_checkbox.addEventListener('change', () => {
-//   console.log('check event');
-// });
-
-
-
 city_checkbox.forEach((checkbox) => checkbox.addEventListener('click', () => {
-  console.log('check event');
-  if (checkbox.checked) {
-    city++;
-    console.log(city);
-  }
-
-  if (!checkbox.checked) {
-    city--;
-    console.log(city);
-  }
-
+  checkbox.checked ? city++ : city--;
 }));
 
 const errorMsg = [
   "Veuillez entrer 2 caractères minimum.",
-  "Veuillez entrer une adresse mail valide.",
-  "Vous devez sélectionner au moins une ville",
-  "Vous devez vérifier le nombre de tournoi ou les villes sélectionnées",
-  "Vous avez sélectionné plus de villes que de tournoi joués",
-  "Vous devez accepter les termes et conditions."
+  "Veuillez entrer une adresse mail valide."
 ];
 
 function checkFirstname() {
@@ -77,7 +56,7 @@ function checkFirstname() {
   if (firstname.match(nameReg)) {
     firstnameError.textContent = 'Le champ ne doit pas contenir de chiffres ou de caractères spéciaux';
     formSub.firstname.classList.add('invalid');
-    // return false;&
+    // return false;
     isValid = false;
   }
 
@@ -104,19 +83,16 @@ function checkLastname() {
     // return false;
     isValid = false;
   }
-
   if (lastname.length < 2 ) {
     lastnameError.textContent = errorMsg[0];
     formSub.lastname.classList.add('invalid');
     // return false;
     isValid = false;
-
   } else {
     lastnameError.textContent = '';
     formSub.lastname.classList.remove('invalid');
     formSub.lastname.classList.add('valid');
     isValid = true;
-
   }
 }
 
@@ -179,26 +155,24 @@ function checkAge() {
 }
 
 function checkNumberPlayed() {
-  // let numberPlayed = formSub.numberPlayed.value;
-  // let city = 0;
+  const numberPlayed = formSub.numberPlayed.value;
 
-  // for (let i = 0; i < checkbox.length -2; i++) {
-  //   if (checkbox[i].checked === true) {
-  //     city++;
-  //   }
-  // }
   formSub.numberPlayed.classList.remove('invalid');
   formSub.numberPlayed.classList.add('valid');
+  numberPlayedError.textContent = '';
   isValid = true;
 
   if (numberPlayed < city) {
-    numberPlayedError.textContent = errorMsg[3];
+    numberPlayedError.textContent = 'Vous devez vérifier le nombre de tournoi ou les villes sélectionnées';
+    formSub.numberPlayed.classList.remove('valid');
     formSub.numberPlayed.classList.add('invalid');
     isValid = false;
   }
 
   if (city > 0 && numberPlayed === 0) {
     console.error('check number');
+    formSub.numberPlayed.classList.remove('valid');
+    formSub.numberPlayed.classList.add('invalid');
     isValid = false;
   }
 }
@@ -207,7 +181,7 @@ function checkNumberPlayed() {
 
 function checkTcu() {
   if (tcu_checkbox.checked === false) {
-    tcuError.textContent = errorMsg[5];
+    tcuError.textContent = 'Vous devez accepter les termes et conditions.';
     isValid = false;
   } else {
     tcuError.textContent = '';
@@ -277,6 +251,7 @@ tournamentInput.addEventListener('change', () => {
   if (formSub.numberPlayed.value === '0') {
     for (let i = 0; i < checkbox.length -2; i++) {
       checkbox[i].checked = false;
+      formSub.numberPlayed.classList.remove('invalid');
       numberPlayedError.textContent = '';
     }
   }
