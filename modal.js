@@ -32,6 +32,8 @@ const tcu_checkbox = document.getElementById('checkbox1');
 
 const city_checkbox = document.querySelectorAll('.checkbox-city[type=checkbox]');
 
+const modalBody_div = document.querySelector('.modal-body');
+
 //TODO FIX REGEX
 const nameReg = /[\d@~°\\./!&$`€*]/;
 let city = 0;
@@ -186,16 +188,10 @@ function checkTcu() {
 
 // 2nd page modal
 function renderValidation() {
-  modalbg.innerHTML = '';
-  const spanClose = document.createElement('span');
-  spanClose.classList.add('close');
+  formSub.style.display = 'none';
   const content = document.createElement('div');
   content.classList.add('content');
-  modalbg.appendChild(content);
-  content.appendChild(spanClose);
-  spanClose.addEventListener('click', () => {
-    closeModal();
-  });
+  modalBody_div.appendChild(content);
 
   const modal2 = document.createElement('div');
   modal2.classList.add('modal-body', 'modal-confirm');
@@ -207,8 +203,20 @@ function renderValidation() {
   modal2_btn.textContent = 'Fermer';
   modal2_btn.addEventListener('click', () => {
     closeModal();
+    modalBody_div.removeChild(content);
+    formReset();
   });
   content.appendChild(modal2_btn);
+}
+
+function formReset() {
+  formSub.reset();
+  formSub.style.display = 'block';
+  formSub.firstname.classList.remove('valid');
+  formSub.lastname.classList.remove('valid');
+  formSub.email.classList.remove('valid');
+  formSub.birthdate.classList.remove('valid');
+  formSub.numberPlayed.classList.remove('valid');
 }
 
 // Events Listener
