@@ -1,7 +1,7 @@
 "use strict";
 
 function editNav() {
-  let x = document.getElementById("myTopnav");
+  const x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
     x.className += " responsive";
   } else {
@@ -33,22 +33,24 @@ const tcu_checkbox = document.getElementById('checkbox1');
 const city_checkbox = document.querySelectorAll('.checkbox-city[type=\'checkbox\']');
 
 //TODO FIX REGEX
-let nameReg = /[\d@~°\\./!&$`€*]/;
+const nameReg = /[\d@~°\\./!&$`€*]/;
 
-// let numberPlayed = formSub.numberPlayed.value;
 let city = 0;
-
 let is_13 = false;
 let isValid = false;
-
-city_checkbox.forEach((checkbox) => checkbox.addEventListener('click', () => {
-  checkbox.checked ? city++ : city--;
-}));
 
 const errorMsg = [
   "Veuillez entrer 2 caractères minimum.",
   "Veuillez entrer une adresse mail valide."
 ];
+
+function launchModal() {
+  modalbg.style.display = "block";
+}
+
+function closeModal() {
+  modalbg.style.display = "none";
+}
 
 function checkFirstname() {
   let firstname = formSub.firstname.value;
@@ -189,39 +191,6 @@ function checkTcu() {
   }
 }
 
-formSub.addEventListener('submit', (e) => {
-  e.preventDefault();
-  checkFirstname();
-  checkLastname();
-  checkEmail();
-  checkAge();
-  checkNumberPlayed();
-  checkTcu();
-
-  if (isValid) {
-    alert('form valid')
-  } else {
-    console.error('form invalid');
-  }
-
-}); // end form submit
-
-
-// launch modal event
-modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
-
-close_span.addEventListener('click', () => {
-  closeModal();
-});
-
-function launchModal() {
-  modalbg.style.display = "block";
-}
-
-function closeModal() {
-  modalbg.style.display = "none";
-}
-
 // for 2nd page modal
 // modalbg.innerHTML = `<p>test</p>`;
 
@@ -229,6 +198,14 @@ function closeModal() {
 
 
 // Events Listener
+
+// launch modal event
+modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
+
+// close modal event
+close_span.addEventListener('click', () => {
+  closeModal();
+});
 
 firstname_input.addEventListener('input', () => {
   checkFirstname();
@@ -246,6 +223,10 @@ birthdate_input.addEventListener('input', () => {
   checkAge();
 });
 
+city_checkbox.forEach((checkbox) => checkbox.addEventListener('click', () => {
+  checkbox.checked ? city++ : city--;
+}));
+
 // reset checkbox if input tournament = 0
 tournamentInput.addEventListener('change', () => {
   if (formSub.numberPlayed.value === '0') {
@@ -256,4 +237,23 @@ tournamentInput.addEventListener('change', () => {
     }
   }
 });
+
+// form submit
+formSub.addEventListener('submit', (e) => {
+  e.preventDefault();
+  checkFirstname();
+  checkLastname();
+  checkEmail();
+  checkAge();
+  checkNumberPlayed();
+  checkTcu();
+
+  if (isValid) {
+    alert('form valid')
+  } else {
+    console.error('form invalid');
+  }
+
+});
+
 
