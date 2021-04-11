@@ -11,11 +11,11 @@ function editNav() {
 
 // DOM Elements
 const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelectorAll(".modal-btn");
+const modalBtn = document.querySelectorAll('.modal-btn');
 const close_span = document.querySelector('.close');
 const formSub = document.getElementById('formSub');
 const tournamentInput = document.getElementById('numberPlayed');
-const checkbox = document.getElementsByClassName("checkbox-input");
+const checkbox = document.getElementsByClassName('checkbox-input');
 
 const firstnameError = document.querySelector('#firstname + span.error');
 const lastnameError = document.querySelector('#lastname + span.error');
@@ -30,14 +30,18 @@ const email_input = document.getElementById('email');
 const birthdate_input = document.getElementById('birthdate');
 const tcu_checkbox = document.getElementById('checkbox1');
 
-const city_checkbox = document.querySelectorAll('.checkbox-city[type=\'checkbox\']');
+const city_checkbox = document.querySelectorAll('.checkbox-city[type=checkbox]');
 
 //TODO FIX REGEX
 const nameReg = /[\d@~°\\./!&$`€*]/;
-
 let city = 0;
+
+let firstnameValid = false;
+let lastnameValid = false;
+let emailValid = false;
 let is_13 = false;
-let isValid = false;
+let numberPlayedValid = false;
+let tcuValid = false;
 
 const errorMsg = [
   "Veuillez entrer 2 caractères minimum.",
@@ -53,48 +57,43 @@ function closeModal() {
 }
 
 function checkFirstname() {
-  let firstname = formSub.firstname.value;
+  const firstname = formSub.firstname.value;
 
   if (firstname.match(nameReg)) {
     firstnameError.textContent = 'Le champ ne doit pas contenir de chiffres ou de caractères spéciaux';
     formSub.firstname.classList.add('invalid');
-    // return false;
-    isValid = false;
+    firstnameValid = false;
   }
 
   if (firstname.length < 2 ) {
     firstnameError.textContent = errorMsg[0];
     formSub.firstname.classList.add('invalid');
-    // return false;
-    isValid = false;
-
+    firstnameValid = false;
   } else {
     firstnameError.textContent = '';
     formSub.firstname.classList.remove('invalid');
     formSub.firstname.classList.add('valid');
-    isValid = true;
+    firstnameValid = true;
   }
 }
 
 function checkLastname() {
-  let lastname = formSub.lastname.value;
+  const lastname = formSub.lastname.value;
 
   if (lastname.match(nameReg)) {
     lastnameError.textContent = 'Le champ ne doit pas contenir de chiffres ou de caractères spéciaux';
     formSub.lastname.classList.add('invalid');
-    // return false;
-    isValid = false;
+    lastnameValid = false;
   }
   if (lastname.length < 2 ) {
     lastnameError.textContent = errorMsg[0];
     formSub.lastname.classList.add('invalid');
-    // return false;
-    isValid = false;
+    lastnameValid = false;
   } else {
     lastnameError.textContent = '';
     formSub.lastname.classList.remove('invalid');
     formSub.lastname.classList.add('valid');
-    isValid = true;
+    lastnameValid = true;
   }
 }
 
@@ -106,13 +105,12 @@ function checkEmail() {
   if (!email.match(emailRegex)) {
     emailError.textContent = errorMsg[1];
     formSub.email.classList.add('invalid');
-    // return false;
-    isValid = false;
+    emailValid = false;
   } else {
     emailError.textContent = '';
     formSub.email.classList.remove('invalid');
     formSub.email.classList.add('valid');
-    isValid = true;
+    emailValid = true;
   }
 }
 
@@ -128,8 +126,7 @@ function checkAge() {
     console.log('not a date');
     formSub.birthdate.classList.add('invalid');
     formSub.birthdate.classList.remove('valid');
-    ageError.textContent = 'Vous devez saisir une date'
-    isValid = false;
+    ageError.textContent = 'Vous devez saisir une date';
   }
 
   let age = today.getFullYear() - y;
@@ -146,13 +143,11 @@ function checkAge() {
     formSub.birthdate.classList.remove('invalid');
     ageError.textContent = '';
     is_13 = true;
-    isValid = true;
   } else {
     formSub.birthdate.classList.remove('valid');
     formSub.birthdate.classList.add('invalid');
     ageError.textContent = 'Vous devez avoir au moins 13 ans'
     is_13 = false;
-    isValid = false;
   }
 }
 
@@ -162,39 +157,35 @@ function checkNumberPlayed() {
   formSub.numberPlayed.classList.remove('invalid');
   formSub.numberPlayed.classList.add('valid');
   numberPlayedError.textContent = '';
-  isValid = true;
+  numberPlayedValid = true;
 
   if (numberPlayed < city) {
     numberPlayedError.textContent = 'Vous devez vérifier le nombre de tournoi ou les villes sélectionnées';
     formSub.numberPlayed.classList.remove('valid');
     formSub.numberPlayed.classList.add('invalid');
-    isValid = false;
+    numberPlayedValid = false;
   }
 
   if (city > 0 && numberPlayed === 0) {
     console.error('check number');
     formSub.numberPlayed.classList.remove('valid');
     formSub.numberPlayed.classList.add('invalid');
-    isValid = false;
+    numberPlayedValid = false;
   }
 }
-
-// TODO checktcu overwrite isValid
 
 function checkTcu() {
   if (tcu_checkbox.checked === false) {
     tcuError.textContent = 'Vous devez accepter les termes et conditions.';
-    isValid = false;
+    tcuValid = false;
   } else {
     tcuError.textContent = '';
-    isValid = true;
+    tcuValid = true;
   }
 }
 
 // for 2nd page modal
 // modalbg.innerHTML = `<p>test</p>`;
-
-
 
 
 // Events Listener
@@ -248,10 +239,11 @@ formSub.addEventListener('submit', (e) => {
   checkNumberPlayed();
   checkTcu();
 
-  if (isValid) {
-    alert('form valid')
+  if (firstnameValid && lastnameValid && emailValid && is_13 && numberPlayedValid && tcuValid) {
+    alert('form ok => submit');
   } else {
-    console.error('form invalid');
+    console.error('error form');
+    return false;
   }
 
 });
