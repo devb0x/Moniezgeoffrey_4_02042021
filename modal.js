@@ -50,10 +50,16 @@ const errorMsg = [
   "Veuillez entrer une adresse mail valide."
 ];
 
+/**
+ * Open Modal
+ */
 function launchModal() {
   modalbg.style.display = "block";
 }
 
+/**
+ * Close Modal
+ */
 function closeModal() {
   modalbg.style.display = "none";
 }
@@ -245,11 +251,16 @@ birthdate_input.addEventListener('input', () => {
   checkAge();
 });
 
-city_checkbox.forEach((checkbox) => checkbox.addEventListener('click', () => {
+/**
+ * Update city value
+ */
+city_checkbox.forEach((checkbox) => checkbox.addEventListener('change', () => {
   checkbox.checked ? city++ : city--;
 }));
 
-// reset checkbox if input tournament = 0
+/**
+ * Reset checkbox if input tournament = 0
+ */
 tournamentInput.addEventListener('change', () => {
   if (formSub.numberPlayed.value === '0') {
     for (let i = 0; i < checkbox.length -2; i++) {
@@ -260,7 +271,9 @@ tournamentInput.addEventListener('change', () => {
   }
 });
 
-// form submit
+/**
+ * Form Submit
+ */
 formSub.addEventListener('submit', (e) => {
   e.preventDefault();
   checkFirstname();
@@ -271,8 +284,8 @@ formSub.addEventListener('submit', (e) => {
   checkTcu();
 
   if (firstnameValid && lastnameValid && emailValid && is_13 && numberPlayedValid && tcuValid) {
-    // alert('form ok => submit');
     renderValidation();
+    city = 0;
   } else {
     console.error('error form');
     return false;
