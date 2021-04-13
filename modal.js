@@ -9,7 +9,10 @@ function editNav() {
   }
 }
 
-// DOM Elements
+/**
+ * DOM Selectors
+ * @type {Element}
+ */
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll('.modal-btn');
 const close_span = document.querySelectorAll('.close');
@@ -28,16 +31,29 @@ const firstname_input = document.getElementById('firstname');
 const lastname_input = document.getElementById('lastname');
 const email_input = document.getElementById('email');
 const birthdate_input = document.getElementById('birthdate');
-const tcu_checkbox = document.getElementById('checkbox1');
-
 const city_checkbox = document.querySelectorAll('.checkbox-city[type=checkbox]');
+const tcu_checkbox = document.getElementById('checkbox1');
 
 const modalBody_div = document.querySelector('.modal-body');
 
 //TODO FIX REGEX
+
+/**
+ * Check if first and lastname contains specific character
+ * @type {RegExp}
+ */
 const nameReg = /[\d@~°\\./!&$`€*]/;
+
+/**
+ * Used to compare tournament played & checkbox checked
+ * @type {number}
+ */
 let city = 0;
 
+/**
+ * for Form Validation
+ * @type {boolean}
+ */
 let firstnameValid = false;
 let lastnameValid = false;
 let emailValid = false;
@@ -45,6 +61,10 @@ let is_13 = false;
 let numberPlayedValid = false;
 let tcuValid = false;
 
+/**
+ * Error Message displayed dynamically
+ * @type {string[]}
+ */
 const errorMsg = [
   "Veuillez entrer 2 caractères minimum.",
   "Veuillez entrer une adresse mail valide."
@@ -64,6 +84,9 @@ function closeModal() {
   modalbg.style.display = "none";
 }
 
+/**
+ * Check firstname with regex & add/remove class
+ */
 function checkFirstname() {
   const firstname = formSub.firstname.value;
 
@@ -85,6 +108,9 @@ function checkFirstname() {
   }
 }
 
+/**
+ * Check lastname with regex & add/remove class
+ */
 function checkLastname() {
   const lastname = formSub.lastname.value;
 
@@ -105,6 +131,9 @@ function checkLastname() {
   }
 }
 
+/**
+ * Check email with regex & add/remove class
+ */
 function checkEmail() {
   let email = formSub.email.value;
   // let validRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+))/
@@ -122,6 +151,10 @@ function checkEmail() {
   }
 }
 
+/**
+ * Check Date
+ * @type {Date}
+ */
 function checkAge() {
   let date = formSub.birthdate.value;
   let checkAge = date.trim();
@@ -159,6 +192,10 @@ function checkAge() {
   }
 }
 
+/**
+ * Check the number of tournament played and the number of city picked
+ * Return false if the user select more cities than tournament played
+ */
 function checkNumberPlayed() {
   const numberPlayed = formSub.numberPlayed.value;
 
@@ -182,6 +219,9 @@ function checkNumberPlayed() {
   }
 }
 
+/**
+ * Check tcu
+ */
 function checkTcu() {
   if (tcu_checkbox.checked === false) {
     tcuError.textContent = 'Vous devez accepter les termes et conditions.';
@@ -192,7 +232,9 @@ function checkTcu() {
   }
 }
 
-// 2nd page modal
+/**
+ * Render 2nd page of the modal when the form is submit (and valid)
+ */
 function renderValidation() {
   formSub.style.display = 'none';
   const content = document.createElement('div');
@@ -215,7 +257,11 @@ function renderValidation() {
   content.appendChild(modal2_btn);
 }
 
+/**
+ * Reset form and city to 0
+ */
 function formReset() {
+  city = 0;
   formSub.reset();
   formSub.style.display = 'block';
   formSub.firstname.classList.remove('valid');
@@ -225,12 +271,13 @@ function formReset() {
   formSub.numberPlayed.classList.remove('valid');
 }
 
-// Events Listener
-
-// launch modal event
+/**
+ * Events Listener
+ * Open & Close modal
+ * Check inputs
+ */
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
-// close modal event
 close_span.forEach((x) => x.addEventListener('click', () => {
   closeModal();
 }));
@@ -285,7 +332,6 @@ formSub.addEventListener('submit', (e) => {
 
   if (firstnameValid && lastnameValid && emailValid && is_13 && numberPlayedValid && tcuValid) {
     renderValidation();
-    city = 0;
   } else {
     console.error('error form');
     return false;
