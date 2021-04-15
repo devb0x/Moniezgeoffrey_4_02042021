@@ -1,18 +1,10 @@
 "use strict";
 
-function editNav() {
-  const x = document.getElementById("myTopnav");
-  if (x.className === "topnav") {
-    x.className += " responsive";
-  } else {
-    x.className = "topnav";
-  }
-}
-
 /**
  * DOM Selectors
  * @type {Element}
  */
+const navbar = document.querySelector('.main-navbar');
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll('.modal-btn');
 const close_span = document.querySelectorAll('.close');
@@ -33,25 +25,27 @@ const email_input = document.getElementById('email');
 const birthdate_input = document.getElementById('birthdate');
 const city_checkbox = document.querySelectorAll('.checkbox-city[type=checkbox]');
 const tcu_checkbox = document.getElementById('checkbox1');
+const newsletter_checkbox = document.getElementById('checkbox2');
 
 const modalBody_div = document.querySelector('.modal-body');
 
-//TODO FIX REGEX
-
 /**
  * Check if first and lastname contains specific character
+ * Check if valid email
  * @type {RegExp}
  */
-const nameReg = /[\d@~°\\./!&$`€*]/;
+const nameReg = /^[a-zA-Z\- éèç]{2,}$/i;
+const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
 /**
- * Used to compare tournament played & checkbox checked
+ * Used in checkNumberPlayed()
+ * to compare the number of tournament played & the number of checkbox checked
  * @type {number}
  */
 let city = 0;
 
 /**
- * for Form Validation
+ * We need those set to true for Form Validation
  * @type {boolean}
  */
 let firstnameValid = false;
@@ -60,15 +54,21 @@ let emailValid = false;
 let is_13 = false;
 let numberPlayedValid = false;
 let tcuValid = false;
+let newsLetterSubscribe = false; // optional
 
 /**
- * Error Message displayed dynamically
- * @type {string[]}
+ * Navbar expand / collapse
  */
-const errorMsg = [
-  "Veuillez entrer 2 caractères minimum.",
-  "Veuillez entrer une adresse mail valide."
-];
+function editNav() {
+  const x = document.getElementById("myTopnav");
+  if (x.className === "topnav") {
+    x.className += " responsive";
+    navbar.style.marginTop = '3rem';
+  } else {
+    x.className = "topnav";
+    navbar.style.marginTop = 'unset';
+  }
+}
 
 /**
  * Open Modal
@@ -90,14 +90,8 @@ function closeModal() {
 function checkFirstname() {
   const firstname = formSub.firstname.value;
 
-  if (firstname.match(nameReg)) {
-    firstnameError.textContent = 'Le champ ne doit pas contenir de chiffres ou de caractères spéciaux';
-    formSub.firstname.classList.add('invalid');
-    firstnameValid = false;
-  }
-
-  if (firstname.length < 2 ) {
-    firstnameError.textContent = errorMsg[0];
+  if (!firstname.match(nameReg)) {
+    firstnameError.textContent = 'Le champ ne doit pas contenir de chiffres ou de caractères spéciaux et contenir au moins 2 caractères.';
     formSub.firstname.classList.add('invalid');
     firstnameValid = false;
   } else {
@@ -114,13 +108,8 @@ function checkFirstname() {
 function checkLastname() {
   const lastname = formSub.lastname.value;
 
-  if (lastname.match(nameReg)) {
-    lastnameError.textContent = 'Le champ ne doit pas contenir de chiffres ou de caractères spéciaux';
-    formSub.lastname.classList.add('invalid');
-    lastnameValid = false;
-  }
-  if (lastname.length < 2 ) {
-    lastnameError.textContent = errorMsg[0];
+  if (!lastname.match(nameReg)) {
+    lastnameError.textContent = 'Le champ ne doit pas contenir de chiffres ou de caractères spéciaux et contenir au moins 2 caractères.';
     formSub.lastname.classList.add('invalid');
     lastnameValid = false;
   } else {
@@ -136,11 +125,9 @@ function checkLastname() {
  */
 function checkEmail() {
   let email = formSub.email.value;
-  // let validRegex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+))/
-  let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 
   if (!email.match(emailRegex)) {
-    emailError.textContent = errorMsg[1];
+    emailError.textContent = 'Veuillez entrer une adresse mail valide.';
     formSub.email.classList.add('invalid');
     emailValid = false;
   } else {
@@ -221,6 +208,7 @@ function checkNumberPlayed() {
 
 /**
  * Check tcu
+ * @type {checkbox}
  */
 function checkTcu() {
   if (tcu_checkbox.checked === false) {
@@ -230,6 +218,14 @@ function checkTcu() {
     tcuError.textContent = '';
     tcuValid = true;
   }
+}
+
+/***
+ * Check newsletter
+ * @type {checkbox}
+ */
+function checkNewsletter() {
+  newsLetterSubscribe = newsletter_checkbox.checked === true;
 }
 
 /**
@@ -274,7 +270,7 @@ function formReset() {
 /**
  * Events Listener
  * Open & Close modal
- * Check inputs
+ * Check inputs & call functions
  */
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 
@@ -319,6 +315,13 @@ tournamentInput.addEventListener('change', () => {
 });
 
 /**
+ * Check newsletter
+ */
+newsletter_checkbox.addEventListener('change', () => {
+  checkNewsletter();
+});
+
+/**
  * Form Submit
  */
 formSub.addEventListener('submit', (e) => {
@@ -329,6 +332,7 @@ formSub.addEventListener('submit', (e) => {
   checkAge();
   checkNumberPlayed();
   checkTcu();
+  checkNewsletter();
 
   if (firstnameValid && lastnameValid && emailValid && is_13 && numberPlayedValid && tcuValid) {
     renderValidation();
@@ -338,6 +342,8 @@ formSub.addEventListener('submit', (e) => {
   }
 
 });
+
+
 
 
 
