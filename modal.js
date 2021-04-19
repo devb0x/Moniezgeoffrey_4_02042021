@@ -184,7 +184,7 @@ function checkAge() {
  * Return false if the user select more cities than tournament played
  */
 function checkNumberPlayed() {
-  const numberPlayed = formSub.numberPlayed.value;
+  let numberPlayed = formSub.numberPlayed.value;
 
   formSub.numberPlayed.classList.remove('invalid');
   formSub.numberPlayed.classList.add('valid');
@@ -198,8 +198,15 @@ function checkNumberPlayed() {
     numberPlayedValid = false;
   }
 
+  if (city === 0 && numberPlayed > 0) {
+    numberPlayedError.textContent = 'Vous devez vérifier le nombre de tournoi ou les villes sélectionnées';
+    formSub.numberPlayed.classList.remove('valid');
+    formSub.numberPlayed.classList.add('invalid');
+    numberPlayedValid = false;
+  }
+
   if (city > 0 && numberPlayed === 0) {
-    console.error('check number');
+    numberPlayedError.textContent = 'Vous devez vérifier le nombre de tournoi ou les villes sélectionnées';
     formSub.numberPlayed.classList.remove('valid');
     formSub.numberPlayed.classList.add('invalid');
     numberPlayedValid = false;
