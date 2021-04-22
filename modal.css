@@ -40,6 +40,14 @@ img {
 .main-navbar {
     float: right;
 }
+
+@media screen and (max-width: 768px) {
+  .main-navbar {
+    float: unset;
+  }
+
+}
+
 .topnav a {
   float: left;
   display: block;

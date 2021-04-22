@@ -63,7 +63,7 @@ function editNav() {
   const x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
     x.className += " responsive";
-    navbar.style.marginTop = '3rem';
+    navbar.style.marginTop = '4rem';
   } else {
     x.className = "topnav";
     navbar.style.marginTop = 'unset';
@@ -154,7 +154,7 @@ function checkAge() {
     console.log('not a date');
     formSub.birthdate.classList.add('invalid');
     formSub.birthdate.classList.remove('valid');
-    ageError.textContent = 'Vous devez saisir une date';
+    ageError.textContent = 'Vous devez saisir une date au format JJ/MM/AAAA';
   }
 
   let age = today.getFullYear() - y;
@@ -184,7 +184,7 @@ function checkAge() {
  * Return false if the user select more cities than tournament played
  */
 function checkNumberPlayed() {
-  let numberPlayed = formSub.numberPlayed.value;
+  let numberPlayed = Number(formSub.numberPlayed.value);
 
   formSub.numberPlayed.classList.remove('invalid');
   formSub.numberPlayed.classList.add('valid');
@@ -329,7 +329,7 @@ newsletter_checkbox.addEventListener('change', () => {
 });
 
 /**
- * Form Submit
+ * Form Validation & Submit
  */
 formSub.addEventListener('submit', (e) => {
   e.preventDefault();
