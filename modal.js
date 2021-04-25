@@ -58,15 +58,22 @@ let newsLetterSubscribe = false; // optional
 
 /**
  * Navbar expand / collapse
+ * disable scroll when we expand the navbar
  */
+function noScroll() {
+  window.scrollTo(0, 0)
+}
+
 function editNav() {
   const x = document.getElementById("myTopnav");
   if (x.className === "topnav") {
     x.className += " responsive";
-    navbar.style.marginTop = '4rem';
+    navbar.classList.add('expand');
+    window.addEventListener('scroll', noScroll)
   } else {
     x.className = "topnav";
-    navbar.style.marginTop = 'unset';
+    navbar.classList.remove('expand');
+    window.removeEventListener('scroll', noScroll)
   }
 }
 
