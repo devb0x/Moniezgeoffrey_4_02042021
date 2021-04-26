@@ -475,7 +475,7 @@ input {
   text-transform: capitalize;
   font-size: 1.3rem;
   padding: 15px 23px;
-  margin: 0 59px;
+  margin: 59px 0;
 }
 .hero-img {
   grid-column: span 8;
