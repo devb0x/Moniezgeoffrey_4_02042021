@@ -93,9 +93,10 @@ function closeModal() {
 
 /**
  * Check firstname with regex & add/remove class
+ * @param firstname
  */
-function checkFirstname() {
-  const firstname = formSub.firstname.value;
+
+function checkFirstname(firstname) {
 
   if (!firstname.match(nameReg)) {
     firstnameError.textContent = 'Le champ ne doit pas contenir de chiffres ou de caractères spéciaux et contenir au moins 2 caractères.';
@@ -111,9 +112,9 @@ function checkFirstname() {
 
 /**
  * Check lastname with regex & add/remove class
+ * @param lastname
  */
-function checkLastname() {
-  const lastname = formSub.lastname.value;
+function checkLastname(lastname) {
 
   if (!lastname.match(nameReg)) {
     lastnameError.textContent = 'Le champ ne doit pas contenir de chiffres ou de caractères spéciaux et contenir au moins 2 caractères.';
@@ -129,9 +130,9 @@ function checkLastname() {
 
 /**
  * Check email with regex & add/remove class
+ * @param email
  */
-function checkEmail() {
-  let email = formSub.email.value;
+function checkEmail(email) {
 
   if (!email.match(emailRegex)) {
     emailError.textContent = 'Veuillez entrer une adresse mail valide.';
@@ -147,10 +148,10 @@ function checkEmail() {
 
 /**
  * Check Date
+ * @param date
  * @type {Date}
  */
-function checkAge() {
-  let date = formSub.birthdate.value;
+function checkAge(date) {
   let checkAge = date.trim();
   let y = parseInt(checkAge.substring(0,4));
   let m = parseInt(checkAge.substring(5,8));
@@ -161,7 +162,8 @@ function checkAge() {
     console.log('not a date');
     formSub.birthdate.classList.add('invalid');
     formSub.birthdate.classList.remove('valid');
-    ageError.textContent = 'Vous devez saisir une date au format JJ/MM/AAAA';
+    ageError.textContent = 'Vous devez saisir une date au format AAAA-MM-JJ';
+    return;
   }
 
   let age = today.getFullYear() - y;
@@ -189,10 +191,9 @@ function checkAge() {
 /**
  * Check the number of tournament played and the number of city picked
  * Return false if the user select more cities than tournament played
+ * @param numberPlayed
  */
-function checkNumberPlayed() {
-  let numberPlayed = Number(formSub.numberPlayed.value);
-
+function checkNumberPlayed(numberPlayed) {
   formSub.numberPlayed.classList.remove('invalid');
   formSub.numberPlayed.classList.add('valid');
   numberPlayedError.textContent = '';
@@ -292,20 +293,20 @@ close_span.forEach((x) => x.addEventListener('click', () => {
   closeModal();
 }));
 
-firstname_input.addEventListener('input', () => {
-  checkFirstname();
+firstname_input.addEventListener('input', (e) => {
+  checkFirstname(formSub.firstname.value);
 });
 
-lastname_input.addEventListener('input', () => {
-  checkLastname();
+lastname_input.addEventListener('input', (e) => {
+  checkLastname(formSub.lastname.value);
 });
 
-email_input.addEventListener('input', () => {
-  checkEmail();
+email_input.addEventListener('input', (e) => {
+  checkEmail(formSub.email.value);
 });
 
-birthdate_input.addEventListener('input', () => {
-  checkAge();
+birthdate_input.addEventListener('input', (e) => {
+  checkAge(formSub.birthdate.value);
 });
 
 /**
@@ -318,7 +319,7 @@ city_checkbox.forEach((checkbox) => checkbox.addEventListener('change', () => {
 /**
  * Reset checkbox if input tournament = 0
  */
-tournamentInput.addEventListener('change', () => {
+tournamentInput.addEventListener('change', (e) => {
   if (formSub.numberPlayed.value === '0') {
     for (let i = 0; i < checkbox.length -2; i++) {
       checkbox[i].checked = false;
@@ -331,7 +332,7 @@ tournamentInput.addEventListener('change', () => {
 /**
  * Check newsletter
  */
-newsletter_checkbox.addEventListener('change', () => {
+newsletter_checkbox.addEventListener('change', (e) => {
   checkNewsletter();
 });
 
@@ -340,11 +341,11 @@ newsletter_checkbox.addEventListener('change', () => {
  */
 formSub.addEventListener('submit', (e) => {
   e.preventDefault();
-  checkFirstname();
-  checkLastname();
-  checkEmail();
-  checkAge();
-  checkNumberPlayed();
+  checkFirstname(formSub.firstname.value);
+  checkLastname(formSub.lastname.value);
+  checkEmail(formSub.email.value);
+  checkAge(formSub.birthdate.value);
+  checkNumberPlayed(Number(formSub.numberPlayed.value));
   checkTcu();
   checkNewsletter();
 
